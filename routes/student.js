@@ -15,6 +15,26 @@ router.get(
     });
 
 
+router.put(
+    '/',
+    celebrate({
+        body: Joi.object({
+            first_name: Joi.string().allow(null),
+            last_name: Joi.string().allow(null),
+            gender: Joi.string().allow(null),
+            date_of_birth: Joi.string().allow(null),
+            phone: Joi.string().allow(null),
+            address: Joi.string().allow(null),
+        })
+    }),
+    isAuthStudent,
+    async (req, res, next) => {
+        const { course_id } = req.body;
+        console.log(req.currentUser)
+        await Student.updateOne({ _id: req.currentUser._id }, { $set: { ...req.body } });
+        res.json({ success: true }).status(200);
+    });
+
 router.post(
     '/add-course',
     celebrate({
