@@ -2,7 +2,16 @@ const express = require('express');
 const router = express.Router();
 const { Course } = require('../models');
 const { celebrate, Joi } = require("celebrate");
-const { isAuthAdmin } = require('../middlewares')
+const { isAuthStudent, isAuthAdmin } = require('../middlewares')
+
+router.get(
+    '/',
+    isAuthStudent,
+    async (req, res, next) => {
+        const course = await Course.find({});
+        res.json(course).status(200);
+    });
+
 router.post(
     '/',
     celebrate({

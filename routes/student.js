@@ -5,13 +5,16 @@ const { celebrate, Joi } = require("celebrate");
 const { isAuthStudent } = require('../middlewares');
 const User = require('../models/User');
 const { Schema } = require('mongoose');
+
 router.get(
     '/',
     isAuthStudent,
     async (req, res, next) => {
-        const students = await Student.find({}).populate('courses').exec();
+        const students = await Student.findOne({ _id: req.currentUser._id }).populate('courses').exec();
         res.json(students).status(201);
     });
+
+
 router.post(
     '/add-course',
     celebrate({
